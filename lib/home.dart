@@ -3,7 +3,8 @@ Name Project:
 tenders_discovery
 
 Steps Git:
-git commit -m ""
+git add .
+git commit -m "Groundbreaking"
 git push -u origin main
 
 For add new Package:

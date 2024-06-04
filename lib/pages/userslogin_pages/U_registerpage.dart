@@ -1,5 +1,6 @@
-// ignore_for_file: file_names, avoid_print, prefer_const_constructors, prefer_final_fields
+// ignore_for_file: file_names, avoid_print, prefer_const_constructors, prefer_final_fields, unnecessary_string_interpolations
 import 'package:flutter/material.dart';
+import 'package:tenders_discovery/sqldb.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({ Key? key }) : super(key: key);
@@ -9,7 +10,8 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterPageState extends State<RegisterPage> {
-  
+
+SqlDb sqlDb = SqlDb();
 TextEditingController _userNameController = TextEditingController();
 TextEditingController _userEmailController = TextEditingController();
 TextEditingController _userMobileController = TextEditingController();
@@ -104,7 +106,18 @@ List listItem = ["Tender", "Contractor"];
               ),
               SizedBox(height: 20),
               ElevatedButton(
-                onPressed: (){},
+                onPressed: () async {
+                  int response = await sqlDb.singup("users", {
+                      "user_name" : "${_userNameController.text}", 
+                      "user_email" : "${_userEmailController.text}", 
+                      "user_mobile" : "${_userMobileController.text}", 
+                      "user_password" : "${_userPasswordController.text}", 
+                      "user_type" : "${_userTypeController.text}", 
+                  });
+                  if ( response > 0){
+                    //Navigator
+                  }
+                },
                 child: Text('Register'),
               ),
              ],
