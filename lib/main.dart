@@ -1,8 +1,21 @@
 import 'package:flutter/material.dart';
-import 'package:tenders_discovery/home.dart';
+import 'package:provider/provider.dart';
+import 'package:tenders_discovery/test_table.dart';
+import 'sqldb.dart';
 
-void main() {
-  runApp(const MyApp());
+import 'pages/userslogin_pages/U_registerpage.dart';
+
+void main() async{
+  WidgetsFlutterBinding.ensureInitialized();
+  await SqlDb().intialDb();
+
+  runApp(
+    MultiProvider(providers: [
+      ChangeNotifierProvider(create: (create) => SqlDb()),
+    ],
+     child: const MyApp(),
+  ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -16,7 +29,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const Home(),
+      home: const TestTable(),
     );
   }
 }

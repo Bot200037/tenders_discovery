@@ -1,6 +1,7 @@
 // ignore_for_file: file_names, avoid_print, prefer_const_constructors, prefer_final_fields, unnecessary_string_interpolations
 import 'package:flutter/material.dart';
-import 'package:tenders_discovery/sqldb.dart';
+import 'U_loginpage.dart';
+import '../../sqldb.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({ Key? key }) : super(key: key);
@@ -105,6 +106,12 @@ List listItem = ["Tender", "Contractor"];
                 )
               ),
               SizedBox(height: 20),
+              ElevatedButton(onPressed: (){
+                Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => const LoginPage()));        
+              },
+              child: Text("Login page")),
+              SizedBox(height: 20),              
               ElevatedButton(
                 onPressed: () async {
                   int response = await sqlDb.singup("users", {
@@ -116,8 +123,10 @@ List listItem = ["Tender", "Contractor"];
                   });
                   if ( response > 0){
                     //Navigator
-                  }
-                },
+                    Navigator.push(context,
+                                    MaterialPageRoute(builder: (context) => const LoginPage()));
+                              }
+                  },
                 child: Text('Register'),
               ),
              ],

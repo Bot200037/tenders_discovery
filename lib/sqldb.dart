@@ -58,14 +58,15 @@ class SqlDb extends ChangeNotifier{
     String path = join(databasepath,'database.db');
     await deleteDatabase(path);
   }
-
-  login(String sql) async{
-    //var response = await mydb.rawQuery("SELECT * FROM users WHERE usrName = '${user.usrName}' AND usrPassword = '${user.usrPassword}'");
-    Database? mydb = await db;
-    List<Map> response = await mydb!.rawQuery(sql);
-    return response;
+  Future<bool> login(String sql) async{
+    final Database mydb = await intialDb();
+    var response = await mydb.rawQuery(sql);
+    if(response.isNotEmpty){
+      return true;
+    } else {
+      return false;
+    }
   }
-
   singup(String table , Map<String, Object?> values) async{
     Database? mydb = await db;
     int response = await mydb!.insert(table , values);
