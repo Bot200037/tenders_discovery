@@ -4,7 +4,7 @@ tenders_discovery
 
 Steps Git:
 git add .
-git commit -m "Register Page is Done"
+git commit -m "Set up before shared_preferences"
 git push -u origin main
 
 For add new Package:

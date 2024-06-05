@@ -1,5 +1,7 @@
 // ignore_for_file: file_names, avoid_print, prefer_const_constructors, prefer_final_fields, unnecessary_string_interpolations
 import 'package:flutter/material.dart';
+import 'package:tenders_discovery/pages/contractor_pages/C_homepage.dart';
+import 'package:tenders_discovery/pages/tender_pages/T_homepage.dart';
 import 'package:tenders_discovery/pages/userslogin_pages/U_registerpage.dart';
 import '../../sqldb.dart';
 import '../../test_table.dart';
@@ -19,12 +21,29 @@ TextEditingController _userPasswordController = TextEditingController();
   bool isLoginTrue = false;
 
   login()async{
-    var response =
-    await sqlDb.login("SELECT * FROM users WHERE user_name = '${_userNameController.text}' AND user_password = '${_userPasswordController.text}'");
-    if(response == true){
+    var responseT =
+    await sqlDb.login('''
+    SELECT * FROM users
+    WHERE user_name = '${_userNameController.text}'
+    AND user_password = '${_userPasswordController.text}'
+    AND user_type = 'Tender'
+    ''');
+    var responseC =
+    await sqlDb.login('''
+    SELECT * FROM users
+    WHERE user_name = '${_userNameController.text}'
+    AND user_password = '${_userPasswordController.text}'
+    AND user_type = 'Contractor'
+    ''');
+
+    if(responseT == true){
       if(!mounted) return;
       Navigator.pushReplacement(context,
-          MaterialPageRoute(builder: (context) => TestTable()));
+          MaterialPageRoute(builder: (context) => TenderHome()));
+    } else if (responseC == true) {
+      if(!mounted) return;
+      Navigator.pushReplacement(context,
+          MaterialPageRoute(builder: (context) => ContractorHome()));
     } else {
       setState(() {
         isLoginTrue = true;
