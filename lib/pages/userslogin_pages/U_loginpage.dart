@@ -1,5 +1,6 @@
 // ignore_for_file: file_names, avoid_print, prefer_const_constructors, prefer_final_fields, unnecessary_string_interpolations
 import 'package:flutter/material.dart';
+import 'package:tenders_discovery/pages/admin_pages/A_homepage.dart';
 import 'package:tenders_discovery/pages/contractor_pages/C_homepage.dart';
 import 'package:tenders_discovery/pages/tender_pages/T_homepage.dart';
 import 'package:tenders_discovery/pages/userslogin_pages/U_registerpage.dart';
@@ -36,7 +37,10 @@ TextEditingController _userPasswordController = TextEditingController();
     AND user_type = 'Contractor'
     ''');
 
-    if(responseT == true){
+    if(_userNameController.text == "admin" && _userPasswordController.text == "123"){
+      Navigator.pushReplacement(context,
+          MaterialPageRoute(builder: (context) => AdminHome()));
+    } else if (responseT == true){
       if(!mounted) return;
       Navigator.pushReplacement(context,
           MaterialPageRoute(builder: (context) => TenderHome()));

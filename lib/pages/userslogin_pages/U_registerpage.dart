@@ -18,7 +18,7 @@ TextEditingController _userEmailController = TextEditingController();
 TextEditingController _userMobileController = TextEditingController();
 TextEditingController _userPasswordController = TextEditingController();
 TextEditingController _userTypeController = TextEditingController();
-String val="Tender";
+String val="Contractor";
 List listItem = ["Tender", "Contractor"];
 
 

@@ -25,6 +25,7 @@ class SqlDb extends ChangeNotifier{
   }
   _onCreate(Database db, int version)async{
     Batch batch = db.batch();
+
     batch.execute('''
       CREATE TABLE "users" (
         "user_id" INTEGER PRIMARY KEY AUTOINCREMENT, 
@@ -34,17 +35,48 @@ class SqlDb extends ChangeNotifier{
         "user_password" TEXT,
         "user_type" TEXT)
 ''');
-/*
     batch.execute('''
-      CREATE TABLE "products" (
-        "id" INTEGER PRIMARY KEY AUTOINCREMENT, 
-        "name" TEXT NOT NULL, 
-        "price" TEXT NOT NULL,
-        "description" TEXT NOT NULL,
-        "image" TEXT NOT NULL,
-        "user" TEXT NOT NULL)
+      CREATE TABLE "tenders" (
+        "tenderId" INTEGER PRIMARY KEY AUTOINCREMENT, 
+        "tenderTitle" TEXT, 
+        "tenderLocation" TEXT,
+        "startedDate" TEXT,
+        "finishedDate" TEXT,
+        "tenderCategory" TEXT,
+        "tenderDescription" TEXT,
+        "user_id" INTEGER,
+        FOREIGN KEY ("user_id") REFERENCES "users"("user_id")
+        )
 ''');
-*/
+    batch.execute('''
+      CREATE TABLE "contracts" (
+        "contractId" INTEGER PRIMARY KEY AUTOINCREMENT, 
+        "contractDescription" TEXT,
+        "user_id" INTEGER,
+        FOREIGN KEY ("user_id") REFERENCES "users"("user_id"),
+        "tenderId" INTEGER,
+        FOREIGN KEY ("tenderId") REFERENCES "tenders"("tenderId")
+        )
+''');
+    batch.execute('''
+      CREATE TABLE "contract_status" (
+        "con_statusId" INTEGER PRIMARY KEY AUTOINCREMENT, 
+        "contractStatus" TEXT,
+        "contractId" INTEGER,
+        FOREIGN KEY ("contractId") REFERENCES "contracts"("contractId")
+        )
+''');
+    batch.execute('''
+      CREATE TABLE "tender_request" (
+        "tend_requestId" INTEGER PRIMARY KEY AUTOINCREMENT, 
+        "requestStatus" TEXT,
+        "user_id" INTEGER,
+        FOREIGN KEY ("user_id") REFERENCES "users"("user_id")
+        )
+''');
+
+
+
     await batch.commit();
     print('Create Database and Table ===============================================');
   }

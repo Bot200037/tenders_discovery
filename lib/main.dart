@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:tenders_discovery/test_table.dart';
 import 'sqldb.dart';
 
+//import 'test_table.dart';
+import 'pages/tender_pages/T_homepage.dart';
 import 'pages/userslogin_pages/U_registerpage.dart';
 
 void main() async{
@@ -29,7 +30,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const RegisterPage(),
+      home: const TenderHome(),
     );
   }
 }
