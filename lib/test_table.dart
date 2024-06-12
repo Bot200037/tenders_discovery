@@ -12,7 +12,7 @@ class TestTable extends StatefulWidget {
 
 class _TestTableState extends State<TestTable> {
 //========================================
-String table_name = "users"  ;
+String table_name = "tender_request"  ;
   
   SqlDb sqlDb = SqlDb();
   bool isLoading = true;
@@ -36,26 +36,26 @@ String table_name = "users"  ;
   Widget build(BuildContext context) {
       return Scaffold(
         body: ListView(
-                              children: [
-                                ListView.builder(
-                                  itemCount: table.length,
-                                  shrinkWrap: true,
-                                  itemBuilder: (context, i) {
-                                    return Column(
-                                      children: [
-                                        Text("${i+1}"),
-                                        Text(table[i]['user_name']),
-                                        Text(table[i]['user_email']),
-                                        Text(table[i]['user_mobile']),
-                                        Text(table[i]['user_password']),
-                                        Text(table[i]['user_type']),
-                                        const SizedBox(height: 20),
-                                      ],
-                                    );
-                                    },
-                                ),
-                              ],
-                            ),
+          children: [
+            ListView.builder(
+              itemCount: table.length,
+              shrinkWrap: true,
+              itemBuilder: (context, i) {
+                return Column(
+                  children: [
+                    Text("${i+1}"),
+                    Text(table[i]['user_id']),
+                    Text(table[i]['user_name']),
+                    Text(table[i]['tenderTitle']),
+                    Text(table[i]['requestStatus']),
+                    //Text(table[i]['user_type']),
+                    const SizedBox(height: 20),
+                  ],
+                );
+                },
+            ),
+          ],
+        ),
       );
   }
 }

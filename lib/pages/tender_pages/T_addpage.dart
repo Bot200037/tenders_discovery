@@ -1,5 +1,6 @@
-// ignore_for_file: file_names, avoid_print, prefer_const_constructors, prefer_final_fields, unnecessary_string_interpolations
+// ignore_for_file: file_names, avoid_print, prefer_const_constructors, prefer_final_fields, unnecessary_string_interpolations, non_constant_identifier_names
 import 'package:flutter/material.dart';
+import 'package:tenders_discovery/pages/tender_pages/T_homepage.dart';
 import '../../sqldb.dart';
 
 
@@ -23,8 +24,8 @@ TextEditingController _startedDate = TextEditingController();
 TextEditingController _finishedDate = TextEditingController();
 TextEditingController _tenderCategory = TextEditingController();
 TextEditingController _tenderDescription = TextEditingController();
-String val="Commercial";
-List listItem = ["Commercial", "Company"];
+String val="Personal";
+List listItem = ["Personal", "Company"];
 
 Future<void> _selectDateS() async {
   DateTime? _picked = await showDatePicker(
@@ -53,34 +54,56 @@ Future<void> _selectDateF() async {
     }
 }
 
+     clearTable() async {
+    await sqlDb.deleteData("DELETE FROM current_tender ");
+    setState(() {});
+     }
 
   @override
   void initState() {
     _tenderCategory.text = "Tender";
+    readData();
 
     // TODO: implement initState
     super.initState();
   }
+  Future<void> readData() async {
+    Map<String, dynamic>? current_request = await sqlDb.getOneRow("current_request");
 
+    if(current_request != null){
+      setState(() {
+      _tenderOnwer.text = current_request['user_name'];
+      _tenderTitle.text = current_request['tenderTitle'];
+
+      });
+    }
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.save),
                   onPressed: () async {
-/*                   int response = await sqlDb.singup("users", {
-                        "user_name" : "${_userNameController.text}", 
-                        "user_email" : "${_userEmailController.text}", 
-                        "user_mobile" : "${_userMobileController.text}", 
-                        "user_password" : "${_userPasswordController.text}", 
-                        "user_type" : "${_userTypeController.text}", 
-                    });
-                    if ( response > 0){
-                      //Navigator
-                      Navigator.push(context,
-                                      MaterialPageRoute(builder: (context) => const LoginPage()));
-                                }
- */                  },
+                    clearTable();
+                    int responset1 = await sqlDb.insertData(
+                      '''
+                      INSERT INTO tenders ( user_name , tenderTitle , tenderLocation , startedDate , finishedDate , tenderCategory , tenderDescription)
+                      VALUES ("${_tenderOnwer.text}" , "${_tenderTitle.text}" , "${_tenderLocation.text}" , "${_startedDate.text}" , "${_finishedDate.text}" , "${_tenderCategory.text}" , "${_tenderDescription.text}")
+                      '''
+                    );
+                    if(responset1 > 0){
+                    int responset2 = await sqlDb.insertData(
+                      '''
+                      INSERT INTO current_tender (tenderId , tenderTitle , tenderLocation , startedDate , finishedDate, tenderCategory, tenderDescription, user_name)
+                      SELECT tenderId , tenderTitle , tenderLocation , startedDate , finishedDate, tenderCategory, tenderDescription , user_name
+                      FROM tenders
+                      '''
+                    );
+                    if(responset2 > 0){
+                          print("done");
+                          Navigator.pushReplacement(context,
+                              MaterialPageRoute(builder: (context) => TenderHome()));
+                    }}},
       ),
       body: SingleChildScrollView(
           child: Column(
@@ -99,6 +122,7 @@ Future<void> _selectDateF() async {
                     decoration: InputDecoration(
                       labelText: 'Tender Title',
                       border: OutlineInputBorder(),
+                      hintText: 'Tender Title',
                     ),
                   ),
                 ),
@@ -109,6 +133,7 @@ Future<void> _selectDateF() async {
                     decoration: InputDecoration(
                       labelText: 'Tender Onwer',
                       border: OutlineInputBorder(),
+                      hintText: 'Tender Onwer',
                     ),
                   ),
                 ),
@@ -119,6 +144,7 @@ Future<void> _selectDateF() async {
                     decoration: InputDecoration(
                       labelText: 'Tender Location',
                       border: OutlineInputBorder(),
+                      hintText: 'Tender Location',
                     ),
                   ),
                 ),
@@ -130,7 +156,7 @@ Future<void> _selectDateF() async {
                         controller: _startedDate,
                         decoration: InputDecoration(
                           labelText: 'Started Date',
-                          //filled: true,
+                          hintText: 'Started Date',
                           icon: Icon(Icons.calendar_today),
                           enabledBorder: OutlineInputBorder(
                             borderSide: BorderSide.none
@@ -146,7 +172,7 @@ Future<void> _selectDateF() async {
                         controller: _finishedDate,
                         decoration: InputDecoration(
                           labelText: 'Finished Date',
-                          //filled: true,
+                          hintText: 'Finished Date',
                           icon: Icon(Icons.calendar_today),
                           enabledBorder: OutlineInputBorder(
                             borderSide: BorderSide.none
@@ -161,33 +187,37 @@ Future<void> _selectDateF() async {
                     ],
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Column(
-                    children: [
-                      Text("Choose your Tender Category?"),
-                      DropdownButton(
-                        hint: Text("Choose your Tender Category?"),
-                        icon: Icon(Icons.arrow_drop_down),
-                        underline: SizedBox(),
-                        value: val,
-                        onChanged: (newValue) {
-                          setState(() {
-                            val = newValue as String;
-                            _tenderCategory.text = val;
-                          });
-                        },
-                        items: listItem.map((valueItem){
-                          return DropdownMenuItem(
-                            value: valueItem,
-                            child: Text(valueItem),
-                          );
-                        }).toList(),
-                      ),
-                    ],
-                  )
-                ),
-               SizedBox(height: 20),
+                    Padding(
+                     padding: const EdgeInsets.only(top: 20,left: 5,right: 5),
+                          child: Text('Choose your Tender Category?',style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 20,
+                                      color: Theme.of(context).colorScheme.primaryVariant,
+                                  ),),
+                        ),
+                    DropdownButton(
+                          style: TextStyle(
+                                  fontSize: 17.5,
+                                  fontWeight: FontWeight.bold,
+                                  color: Theme.of(context).colorScheme.primaryVariant,
+                              ),
+                          borderRadius: BorderRadius.circular(20),
+                          icon: Icon(Icons.arrow_drop_down),
+                          underline: SizedBox(),
+                          value: val,
+                          onChanged: (newValue) {
+                            setState(() {
+                              val = newValue as String;
+                              _tenderCategory.text = val;
+                            });
+                          },
+                          items: listItem.map((valueItem){
+                            return DropdownMenuItem(
+                              value: valueItem,
+                              child: Text(valueItem),
+                            );
+                          }).toList(),
+                        ),SizedBox(height: 20),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: TextFormField(
@@ -196,6 +226,7 @@ Future<void> _selectDateF() async {
                     decoration: InputDecoration(
                       labelText: 'Tender Description',
                       border: OutlineInputBorder(),
+                      hintText: 'Tender Description',
                     ),
                   ),
                 ),               

@@ -1,3 +1,4 @@
+// ignore_for_file: file_names, avoid_print, prefer_const_constructors, prefer_final_fields, unnecessary_string_interpolations
 /*
 Name Project:
 tenders_discovery
@@ -31,4 +32,5 @@ _finishedDate
 _tenderCategory
 _tenderDescription
 
+color: Theme.of(context).colorScheme.primaryVariant
 */

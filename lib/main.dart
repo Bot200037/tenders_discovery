@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:tenders_discovery/pages/userslogin_pages/U_welcomepage.dart';
+import 'package:tenders_discovery/theme/theme_provider.dart';
 import 'sqldb.dart';
 
 //import 'test_table.dart';
-import 'pages/tender_pages/T_homepage.dart';
-import 'pages/userslogin_pages/U_registerpage.dart';
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
@@ -13,6 +13,7 @@ void main() async{
   runApp(
     MultiProvider(providers: [
       ChangeNotifierProvider(create: (create) => SqlDb()),
+      ChangeNotifierProvider(create: (create) => ThemeProvider()),
     ],
      child: const MyApp(),
   ),
@@ -27,10 +28,10 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Tenders Discovery',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: const TenderHome(),
+      home: const Welcome(),
+      debugShowCheckedModeBanner: false,
+      theme: Provider.of<ThemeProvider>(context).themeData,
+
     );
   }
 }
